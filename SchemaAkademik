@@ -1,0 +1,103 @@
+create database Schema_Akademik;
+use Schema_Akademik;
+show tables;
+
+CREATE TABLE fakultas (
+    id_fakultas smallint,
+    fakultas varchar(45),
+    primary key (id_fakultas)
+);
+
+CREATE TABLE jurusan (
+    id_jurusan smallint,
+    id_fakultas smallint,
+    jurusan varchar(45),
+    primary key (id_jurusan),
+    foreign key (id_fakultas) references fakultas(id_fakultas)
+);
+
+CREATE TABLE strata (
+    id_strata smallint,
+    singkat varchar(10),
+    strata varchar(45),
+    primary key (id_strata)
+);
+
+CREATE TABLE program_studi (
+    id_program_studi smallint,
+    id_strata smallint,
+    id_jurusan smallint,
+    program_studi varchar(60),
+    primary key (id_program_studi),
+    foreign key (id_strata) references strata(id_strata),
+    foreign key (id_jurusan) references jurusan(id_jurusan)
+);
+
+CREATE TABLE seleksi_masuk (
+    id_seleksi_masuk smallint,
+    singkat varchar(12),
+    strata varchar(45),
+    primary key (id_seleksi_masuk)
+);
+
+CREATE TABLE mahasiswa (
+    NIM varchar(15),
+    id_seleksi_masuk smallint,
+    id_program_studi smallint,
+    nama varchar(45),
+    angkatan smallint,
+    tgl_lahir date,
+    kota_lahir varchar(60),
+    jenis_kelamin char(1) check (jenis_kelamin in ('W', 'P')),
+    primary key (NIM),
+    foreign key (id_seleksi_masuk) references seleksi_masuk(id_seleksi_masuk),
+    foreign key ( id_program_studi) references program_studi( id_program_studi)
+);
+
+SELECT * FROM fakultas;
+insert into fakultas values
+(1,'Ekonomi & Bisnis'),
+(2,'Ilmu Komputer');
+
+
+SELECT * FROM jurusan;
+insert into jurusan values
+(21,2,'informatika'),
+(22,2,'sistem informasi'),
+(23,2,'teknik komputer');
+
+SELECT * FROM strata;
+insert into strata values 
+(1,'D1','Diploma'),
+(2,'S1','Sarjana'),
+(3,'S2','Magister');
+
+
+SELECT * FROM program_studi;
+insert into program_studi values
+(211,2,21,'teknik informatika'),
+(212,2,21, 'teknik komputer'),
+(219,3,21,'magister ilmu komputer');
+
+SELECT * FROM seleksi_masuk ;
+insert into seleksi_masuk values
+(1,'SNMPTN','SELEKSI NASIONAL MAHASISWA PTN'),
+(2, 'SBMPTN', 'SELEKSI BERSAMA MAHASISWA PTN');
+
+SELECT * FROM mahasiswa ;
+insert into mahasiswa values
+('155150400',1,211,'JONI',2015,'1997-1-1','Malang','W'),
+('155150401',2,212,'JONO',2015,'1997-10-2','Situbondo','P');
+
+update mahasiswa set nama = 'ILLA' where nama = 'jono';
+select * from mahasiswa;
+
+update mahasiswa set nama = 'JONO' where nama ='illa';
+select * from mahasiswa;
+
+delete from mahasiswa where nama = 'JONI';
+select * from  mahasiswa;
+
+delete from mahasiswa where nama = 'JONO';
+select * from  mahasiswa;
+
